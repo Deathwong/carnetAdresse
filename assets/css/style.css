@@ -1,0 +1,16 @@
+.disabledElement {
+    display: none;
+}
+
+.button-carnet {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.onSameLine {
+    display: flex;
+    flex-wrap: nowrap;
+}
