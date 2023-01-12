@@ -1,2 +1,5 @@
-INSERT INTO contact (nom, prenom, telephone, email, adresse, date_anniversaire, note) values ('jean', 'baptiste', 07282928, 'baptiste@gmail.com', 'Torcy 27 rue', '2004-08-29', 'bonjour');
-INSERT INTO contact (nom, prenom, telephone, email, adresse, date_anniversaire, note) values ('joss', 'hile', 07252928, 'molteu@gmail.com', 'Torcy 40 rue', '2002-08-29 ', 'bonsoir');
+/*adresse*/
+INSERT INTO carnetaddress.adresse(numeroRue, nomRue, ville, pays, codePostal, region, departement, lieuDit, complementUn, complementDeux, complementTrois) VALUES(27, 'Rue De La Mogotte', 'Torcy', 'France', '77200', 'île de France', 'departement', 'lieu_dit', 'complément1', 'complement2', 'complement3');
+
+/*contact*/
+INSERT INTO carnetaddress.contact(idAdresse, nom, prenom, surnom, telephone, email, age, dateAnniversaire, sexe, reseauSocial, profession, situationFamiliale, note) VALUES(1, 'Mensah', 'jean', '70029935', 'jeff', 'jean@gmail.com', 18, '2004-08-29', 'maxculin', 'instagram', 'Etudiant', 'Célibataire', 'ma note');
