@@ -1,25 +1,43 @@
 <?php
+
+use php\SingletonPDO;
+
 require 'connection.php';
-
-$connection = getConnection();
-
-// Get form element
-$nom = $_POST["nom"];
-$prenom = $_POST["prenom"];
-$telephone = $_POST["numero"];
-$email = $_POST["email"];
-$adresse = $_POST ["address"];
-$date_anniversaire = $_POST["dateAnniversaire"];
-$note = $_POST["note"];
 
 function saveContact(): void
 {
-    global $connection, $nom, $prenom, $telephone, $email, $adresse, $date_anniversaire, $note;
+    $connection = SingletonPDO::getPDOInstance();
+
+    // Get form element
+    $nom = $_POST["nom"];
+    $prenom = $_POST["prenom"];
+    $telephone = $_POST["numero"];
+    $email = null;
+    $adresse = null;
+    $date_anniversaire = null;
+    $note = null;
+
+    if (isset($_POST["dateAnniversaire"]) && !empty($_POST["dateAnniversaire"])) {
+        $date_anniversaire = $_POST["dateAnniversaire"];
+    }
+
+    if (isset($_POST ["address"])) {
+        $adresse = $_POST ["address"];
+    }
+
+    if (isset($_POST["email"])) {
+        $email = $_POST["email"];
+    }
+
+    if (isset($_POST["note"]) && !empty($_POST["note"])) {
+        $note = $_POST["note"];
+    }
 
 
     $query = "INSERT INTO contact (nom, prenom, telephone, email, adresse, date_anniversaire, note)
     VALUE (:nom, :prenom, :telephone, :email, :adresse, :date_anniversaire, :note)";
     $saveSQLRequest = $connection->prepare($query);
+
 
     //  Binding value
     $saveSQLRequest->bindParam(':nom', $nom);
@@ -36,21 +54,16 @@ function saveContact(): void
 
         if ($isSave) {
             print "$prenom $nom a été bien inséré";
-            // recuperation de l'id
             $id = $connection->lastInsertId();
-            header("location: ../views/details.php?id=$id"); // Renseigner l'id à la place du 4
-
+            header("location: ../views/details.php?id=$id");
         } else {
             header('location: ../views/ajout.php');
         }
     } catch (PDOException $error) {
         print "Connection to data base failed: " . $error->getMessage();
-        header('location: ../views/index.php');
+        header('location: ../views/ajout.php');
         die();
     }
-
-    // Return to home page
-
 }
 
 saveContact();

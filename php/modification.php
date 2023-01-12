@@ -1,11 +1,13 @@
 <?php
-require 'connection.php';
 
-$connection = getConnection();
+use php\SingletonPDO;
+
+require 'connection.php';
 
 function modification(): void
 {
-    global $connection;
+    $connection = SingletonPDO::getPDOInstance();
+
     // Get form element
     $id = $_POST["id"];
     $nom = $_POST["nom"];
@@ -31,7 +33,6 @@ function modification(): void
     $modifySQLRequest->bindParam(':note', $note);
     $modifySQLRequest->bindParam(':id', $id);
 
-    // Execute the query
     try {
         $isSave = $modifySQLRequest->execute();
 
@@ -53,4 +54,3 @@ function modification(): void
 }
 
 modification();
-

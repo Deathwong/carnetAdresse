@@ -96,8 +96,6 @@
                       placeholder="note"
                       maxlength="100"></textarea>
         </div>
-
-
     </form>
     <div class="button-carnet">
         <!-- Submit -->

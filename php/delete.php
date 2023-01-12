@@ -1,10 +1,12 @@
 <?php
+
+use php\SingletonPDO;
+
 require 'connection.php';
 require 'utils.php';
 
 $id = getElementInRequestByAttribute("idDelete");
 
-$connection = getConnection();
 
 /**
  * Supprime le contact à partir de l'id
@@ -13,7 +15,9 @@ $connection = getConnection();
 function deleteContact(): void
 {
     //connect to Data Base
-    global $connection, $id;
+    global $id;
+
+    $connection = SingletonPDO::getPDOInstance();
 
     //query
     $query = "DELETE FROM contact WHERE id = $id";

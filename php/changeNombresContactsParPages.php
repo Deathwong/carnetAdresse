@@ -1,23 +1,13 @@
 <?php
-function changeContactsNombreContactParPage(): void
+
+namespace php;
+
+class ChangeNombresContactsParPages
 {
-    $isSearch = theSearch();
-    $parPages = parPagesForLinks();
-    header("location: ../views/index.php?contactsParPages=$parPages&isSearchActive=$isSearch");
+    public static function changeContactsNombreContactParPage($search, $nbrContactParPage): void
+    {
+        header("location: ../views/index.php?contactsParPages=" . $nbrContactParPage . "->nbrContactParPage&isSearchActive=" . $search);
+    }
 }
 
-/**
- * @return mixed
- */
-function parPagesForLinks(): mixed
-{
-    return $_GET["contactsParPages"];
-}
-
-function theSearch(): mixed
-{
-    return $_GET["theSearch"];
-}
-
-
-changeContactsNombreContactParPage();
+ChangeNombresContactsParPages::changeContactsNombreContactParPage($_GET["theSearch"], $_GET["contactsParPages"]);

@@ -5,8 +5,11 @@ function formIndexToDetailsSubmit(id) {
 
 function modificationDetailsSubmit() {
     let detailsModifictionForm = $("#detailsModificationForm");
-
     detailsModifictionForm.submit();
+}
+
+function setValueSelectBoxNumberOccurrence(nombreOccurrences) {
+    $("#selectBoxNbrOccurrences").val(nombreOccurrences);
 }
 
 function submitDeleteForm() {
@@ -19,7 +22,7 @@ function deleteContactSubmit() {
 }
 
 function selectBoxSubmit() {
-    $("#selectBox").submit();
+    $("#nbrOccurrencesFrom").submit();
 }
 
 function getId(id) {

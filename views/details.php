@@ -7,13 +7,13 @@
 <!--EOF NAV BAR-->
 
 <?php
-
 require '../php/utils.php';
 require '../php/connection.php';
-require '../php/getLastContact.php';
+require "../model/Contact.php";
+require '../php/getContact.php';
 
 $id = getElementInRequestByAttribute("id");
-$contacts = getIdContact();
+$contact = getContactById();
 ?>
 
 <div class="container-fluid">
@@ -22,14 +22,13 @@ $contacts = getIdContact();
         <form action="../php/modification.php" method="post" onsubmit="validationModification()"
               id="detailsModificationForm">
             <label>
-                <input name="id" class="disabledElement" value="<?php echo $id ?>">
+                <input name="id" class="disabledElement" value="<?= $contact->getId() ?>">
             </label>
-
             <div class="form-row">
                 <!-- Nom -->
                 <div class="form-group col-sm-6">
                     <label for="nom">Nom</label>
-                    <input type="text" class="form-control" id="nom" name="nom" value="<?php echo $contacts["nom"] ?>"
+                    <input type="text" class="form-control" id="nom" name="nom" value="<?= $contact->getNom() ?>"
                            disabled>
                     <span id="errorNom"></span>
                 </div>
@@ -37,7 +36,7 @@ $contacts = getIdContact();
                 <div class="form-group col-sm-6">
                     <label for="prenom">Prenom</label>
                     <input type="text" class="form-control" aria-describedby="emailHelp" id="prenom" name="prenom"
-                           value="<?php echo $contacts["prenom"] ?>" disabled>
+                           value="<?= $contact->getPrenom() ?>" disabled>
                     <span id="errorPrenom"></span>
                 </div>
             </div>
@@ -46,7 +45,7 @@ $contacts = getIdContact();
                 <div class="form-group col-md-4">
                     <label for="numero">Numéro</label>
                     <input type="tel" class="form-control" id="numero" name="numero"
-                           value="<?php echo $contacts["telephone"] ?>"
+                           value="<?= $contact->getTelephone() ?>"
                            disabled>
                     <span id="errorNumero"></span>
                 </div>
@@ -54,7 +53,7 @@ $contacts = getIdContact();
                 <div class="form-group col-md-4">
                     <label for="email">Email address</label>
                     <input type="text" class="form-control" id="email" name="email"
-                           value="<?php echo $contacts["email"] ?>"
+                           value="<?= $contact->getEmail() ?>"
                            disabled>
                     <span id="errorEmail"></span>
                 </div>
@@ -62,14 +61,14 @@ $contacts = getIdContact();
                 <div class="form-group col-md-4">
                     <label for="dateAnniversaire">Date de naissance</label>
                     <input id="dateAnniversaire" class="form-control"
-                           name="dateAnniversaire" value="<?php echo $contacts["date_anniversaire"] ?>" type="date"
+                           name="dateAnniversaire" value="<?= $contact->getDateAnniversaire() ?>" type="date"
                            disabled>
                 </div>
             </div>
             <!-- Address -->
             <div class="form-group">
                 <label for="address">Adresse</label>
-                <input id="address" class="form-control" name="address" value="<?php echo $contacts["adresse"] ?>"
+                <input id="address" class="form-control" name="address" value="<?= $contact->getAdresse() ?>"
                        type="text"
                        disabled>
                 <span id="errorAdresse"></span>
@@ -78,7 +77,7 @@ $contacts = getIdContact();
             <div class="form-group">
                 <label for="note">Notes</label>
                 <textarea id="note" class="form-control" name="note"
-                          disabled><?php echo $contacts["note"] ?>g</textarea>
+                          disabled><?= $contact->getNote() ?></textarea>
                 <span id="errorNote"></span>
             </div>
         </form>
@@ -89,13 +88,12 @@ $contacts = getIdContact();
         <div>
             <form method="post" id="deleteForm" action="../php/delete.php">
                 <label>
-                    <input name="idDelete" class="disabledElement" value="<?php echo $id ?>">
+                    <input name="idDelete" class="disabledElement" value="<?= $id ?>">
                 </label>
             </form>
         </div>
 
         <div class="button-carnet">
-
             <!-- Button submit -->
             <button id="submitButton" onclick="modificationDetailsSubmit()"
                     class=" btn btn-primary">

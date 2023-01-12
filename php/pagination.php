@@ -1,7 +1,7 @@
 <?php
 
-$connection = getConnection();
-// On détermine le nombre d'articles par page
+use model\Contact;
+use php\SingletonPDO;
 
 function getContacts(): array
 {
@@ -22,9 +22,9 @@ function getContacts(): array
  * @param int $parPage
  * @return array|false
  */
-function getCurrentPageContact($firstContactOfPage, int $parPage): array|bool
+function getCurrentPageContact($firstContactOfPage, int $parPage)
 {
-    global $connection;
+    $connection = SingletonPDO::getPDOInstance();
 
     $executeQuery = 'SELECT * FROM contact ORDER BY id DESC LIMIT :firstContactOfPage, :parPage';
 
@@ -38,7 +38,7 @@ function getCurrentPageContact($firstContactOfPage, int $parPage): array|bool
     $executeQuery->execute();
 
     // On récupère les valeurs dans un tableau associatif
-    return $executeQuery->fetchAll(PDO::FETCH_ASSOC);
+    return $executeQuery->fetchAll(PDO::FETCH_CLASS, Contact::class);
 }
 
 /**
@@ -53,7 +53,7 @@ function getFirstContactOfThePage(int $currentPage, int $parPage): float|int
 
 /**
  * Permet de calculer le nombre de pages total
- * @param int $nombreTotalContacts Nombre total de contacts dans la base de données
+ * @param int $nombreTotalContacts Nombre total de contact dans la base de données
  * @return int Nombre de pages
  */
 function getNombreDePages(int $nombreTotalContacts): int
@@ -63,11 +63,11 @@ function getNombreDePages(int $nombreTotalContacts): int
 }
 
 /**
- * @return int Nombre de totaux de contacts dans la base de données
+ * @return int Nombre de totaux de contact dans la base de données
  */
 function getNombreTotalContact(): int
 {
-    global $connection;
+    $connection = SingletonPDO::getPDOInstance();
 
     //request
     $query = "SELECT COUNT(1)  as nombre_total from contact";
@@ -79,7 +79,7 @@ function getNombreTotalContact(): int
     //on récupère le nom de contact
     $result = $executeQuery->fetch();
 
-    return $result['nombre_total'];
+    return $result->nombre_total;
 }
 
 /**

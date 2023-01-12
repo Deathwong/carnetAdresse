@@ -1,32 +1,61 @@
 <?php
 
-$dataBaseName = "carnetAddress";
-$host = "localhost";
-$port = "3306";
-$dsn = "mysql:dbname=$dataBaseName;host=$host;port:$port";
-$userName = "root";
-$passWord = "";
-$connection = null;
+namespace php;
+
+use PDO;
+use PDOException;
 
 /**
- * Permet de récupérer une connection à la base de données
- * @return PDO|void
+ * @property PDO $connection
  */
-function getConnection()
+class SingletonPDO
 {
-    global $dsn, $userName, $passWord, $connection;
+    const DATA_BASE_NAME = "carnetAddress";
+    const HOST = "localhost";
+    const PORT = "3306";
+    const USER_NAME = "root";
+    const PASS_WORD = "";
+    private static PDO $instance;
 
-    try {
-        // Test de la connection
-        $connection = new PDO($dsn, $userName, $passWord);
-        // set the PDO error mode to exception
-        $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } catch (PDOException $error) {
-        print "Connection to data base failed: " . $error->getMessage();
-        die();
+
+    private function __construct()
+    {
+        self::$instance = $this->getBddConnection();
     }
 
-    return $connection;
+    public static function getPDOInstance(): PDO
+    {
+        if (!isset(self::$instance)) {
+            new SingletonPDO();
+        }
+
+        return self::$instance;
+    }
+
+    /**
+     * Permet de récupérer une connection à la base de données
+     */
+    private function getBddConnection(): PDO
+    {
+        try {
+            $dataSourceName = 'mysql:dbname=' . self::DATA_BASE_NAME . ';host=' . self::HOST . ';port:' . self::PORT .
+                ';charset=utf8mb4';
+            $bdd = new PDO($dataSourceName, self::USER_NAME, self::PASS_WORD);
+
+            // set the PDO error mode to exception
+            $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $bdd->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+
+            return $bdd;
+
+        } catch (PDOException $error) {
+            $messageErreur = 'ERREUR PDO dans ' . $error->getFile() . ' L.' . $error->getLine() . ' : '
+                . $error->getMessage();
+            die($messageErreur);
+        }
+    }
+
 }
 
-getConnection();
+
+

@@ -1,6 +1,8 @@
 <?php
 
-$connection = getConnection();
+use model\Contact;
+use php\SingletonPDO;
+
 function researchContacts(): array
 {
     global $parPage;
@@ -17,11 +19,6 @@ function researchContacts(): array
         'isSearchActive' => $search);
 
     $queryString = http_build_query($data);
-//$queryString = foo=bar&baz=boom&cow=milk&php=hypertext+processor
-
-//    $url = 'http://localhost/carnetAdresse/views/index.php?' . $queryString;
-
-//    header("Location: $url");
 
     // Contacts de la page courante
     return getCurrentPageContactsResearch($search, $firstContactsOfThePage, $parPage);
@@ -33,9 +30,11 @@ function researchContacts(): array
  * @param int $parPage
  * @return array
  */
-function getCurrentPageContactsResearch(mixed $theResearch, $firstContactOfPage, int $parPage): array
+function getCurrentPageContactsResearch(mixed $theResearch, $firstContactOfPage, int $parPage)
 {
-    global $connection, $parPage;
+    global $parPage;
+
+    $connection = SingletonPDO::getPDOInstance();
 
     //the query
     $query = "SELECT * FROM contact 
@@ -53,17 +52,16 @@ function getCurrentPageContactsResearch(mixed $theResearch, $firstContactOfPage,
     $executeQuery->execute();
 
     //récupérer dans un tableau
-    return $executeQuery->fetchAll(PDO::FETCH_ASSOC);
+    return $executeQuery->fetchAll(PDO::FETCH_CLASS, Contact::class);
 }
 
 
 /**
- * @return int Nombre de totaux de contacts de la recherche
+ * @return int Nombre de totaux de contact de la recherche
  */
 function getNombreTotalContactResearch(): int
 {
-    global $connection;
-
+    $connection = SingletonPDO::getPDOInstance();
     $theResearch = getResearchLibelle();
 
     //request
@@ -78,7 +76,7 @@ function getNombreTotalContactResearch(): int
     //on récupère le nom de contact
     $result = $executeQuery->fetch();
 
-    return $result['nombre_total'];
+    return $result->nombre_total;
 }
 
 function getResearchLibelle(): string

@@ -1,20 +1,12 @@
-<?php
-session_start();
-$_SESSION["isSearch"] = false;
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <?php include 'header.php' ?>
 <body>
-
-
 <!--NAV BAR-->
 <?php include 'navbar.php' ?>
 <!--EOF NAV BAR-->
 <div class="container-fluid">
     <!--TABLEAU-->
-
     <table class="table table-striped caption-top table-hover table-bordered ">
         <caption>Listes des contactes</caption>
         <thead>
@@ -30,10 +22,11 @@ $_SESSION["isSearch"] = false;
               name="formIndexToDetails"
               class="disabledElement">
             <?php
-            require "../php/connection.php";
+            include "../php/connection.php";
             require "../php/research.php";
             require "../php/pagination.php";
             require "../php/nombreDeContactsParPage.php";
+            require "../model/Contact.php";
 
             // Pagination
             $parPageSelectBox = nombresContactsParPages();
@@ -42,8 +35,7 @@ $_SESSION["isSearch"] = false;
             $isSearch = getResearchLibelle();
             $isSearchAtt = isSearch();
 
-            $contacts = "";
-            if (isset($_POST['search']) || $isSearchAtt || $_SESSION["isSearch"] = true) {
+            if (isset($_POST['search']) || $isSearchAtt) {
                 $_SESSION["isSearch"] = true;
                 $contacts = researchContacts();
                 $nombreTotalContacts = getNombreTotalContactResearch();
@@ -54,31 +46,28 @@ $_SESSION["isSearch"] = false;
 
             $nombreDePages = getNombreDePages($nombreTotalContacts);
 
-
             foreach ($contacts as $contact) {
                 ?>
-
                 <tr>
-                    <td><?= $contact['nom'] ?></td>
-                    <td><?= $contact['prenom'] ?></td>
-                    <td><?= $contact['telephone'] ?></td>
+                    <td><?= $contact->getNom() ?></td>
+                    <td><?= $contact->getPrenom() ?></td>
+                    <td><?= $contact->getTelephone() ?></td>
                     <td>
                         <div class="button-carnet">
-                            <a href="#" onclick="formIndexToDetailsSubmit(<?= $contact['id'] ?>)">
+                            <a href="#" onclick="formIndexToDetailsSubmit(<?= $contact->getId() ?>)">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
                             <a type="button" id="deleteButton" data-bs-toggle="modal"
                                data-bs-target="#deleteModal" href="#"
-                               onclick="getId(<?= $contact['id'] ?>)">
+                               onclick="getId(<?= $contact->getId() ?>)">
                                 <i class="fa-solid fa-trash-can"></i>
                             </a>
-                            <a href="#" onclick="formIndexToDetailsSubmit(<?= $contact['id'] ?>)">
+                            <a href="#" onclick="formIndexToDetailsSubmit(<?= $contact->getId() ?>)">
                                 <i class="fa-solid fa-eye"></i>
                             </a>
                         </div>
                     </td>
                 </tr>
-
                 <?php
 
             }
@@ -89,7 +78,6 @@ $_SESSION["isSearch"] = false;
         </form>
         </tbody>
     </table>
-
     <!-- delete Form-->
     <div>
         <form method="post" id="deleteFormIndex" action="../php/delete.php">
@@ -98,7 +86,6 @@ $_SESSION["isSearch"] = false;
             </label>
         </form>
     </div>
-
     <!-- modal delete-->
     <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -118,7 +105,6 @@ $_SESSION["isSearch"] = false;
             </div>
         </div>
     </div>
-
     <div class="onSameLine">
         <div>
             <nav>
@@ -149,9 +135,10 @@ $_SESSION["isSearch"] = false;
 
         <!-- select Box-->
         <div>
-            <form method="get" name="selectBox" id="selectForm" action="../php/changeNombresContactsParPages.php">
+            <form method="get" name="nbrOccurrencesFrom" id="nbrOccurrencesFrom"
+                  action="../php/changeNombresContactsParPages.php">
                 <label>
-                    <select name="contactsParPages" class="form-select ms-1" id="selectBox"
+                    <select name="contactsParPages" class="form-select ms-1" id="selectBoxNbrOccurrences"
                             onchange="selectBoxSubmit()">
                         <option value="5">5</option>
                         <option value="10">10</option>
@@ -165,15 +152,11 @@ $_SESSION["isSearch"] = false;
         </div>
     </div>
 </div>
+<!--Footer-->
 <?php include 'footer.php' ?>
 
 <script>
-    // lancer selected
-    // $("#")
-    console.log(<?= $parPage ?>);
-    document.getElementById('selectBox').value = <?= $parPage ?>;
-    //document.getElementById('selectBox').selected = <?php //= $parPage ?>//;
-
+    setValueSelectBoxNumberOccurrence(<?= $parPage ?>);
 </script>
 </body>
 </html>
