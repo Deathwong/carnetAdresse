@@ -11,7 +11,6 @@ class Contact
     private ?string $surnom;
     private string $telephone;
     private ?string $email;
-    private ?string $adresse;
     private ?string $dateAnniversaire;
     private ?string $note;
 

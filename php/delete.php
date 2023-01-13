@@ -3,7 +3,7 @@
 use php\SingletonPDO;
 
 require 'connection.php';
-require 'utils.php';
+require '../utils/utils.php';
 
 
 /**

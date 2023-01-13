@@ -5,10 +5,12 @@
 <!--NAV BAR-->
 <?php include 'navbar.php' ?>
 <!--EOF NAV BAR-->
-
+<?php
+include '../services/ContactService.php';
+?>
 <!--Formulaire-->
 <div class="container-fluid">
-    <form action="../php/Insert.php" method="post" id="ajoutContactForm">
+    <form action="../controller/ContactController.php" method="post" id="ajoutContactForm">
         <div class="form-row">
             <!-- Nom -->
             <div class="form-group col-sm-6">

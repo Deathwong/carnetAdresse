@@ -7,7 +7,7 @@
 <!--EOF NAV BAR-->
 
 <?php
-require '../php/utils.php';
+require '../utils/utils.php';
 require '../php/connection.php';
 require "../model/Contact.php";
 require '../php/getContact.php';
